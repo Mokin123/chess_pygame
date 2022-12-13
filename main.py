@@ -11,7 +11,7 @@ clicked = False
 click1 = False
 # with reference to the board
 click1_pos = 0
-
+moves = 0
 click2 = False
 # with reference to the board
 click2_pos = 0
@@ -82,11 +82,20 @@ def get_pos(x,y):
     second = int(x/100)
     return first,second
 
+# check who's turn it is
+def check_turn():
+    if moves % 2 == 0:
+        return True
+    elif moves % 2 == 1:
+        return False
+
 # moving a piece to the wanted location
-def move_piece(old,new):
+def move_piece(old,new,move):
     if board[new[0]][new[1]] != board[old[0]][old[1]]:
         board[new[0]][new[1]] = board[old[0]][old[1]]
         board[old[0]][old[1]] = 0
+        move = moves + 1
+        return move
 #           current position of the piece
 # def pawn_rule(current,piece):
 #     # for white
@@ -116,20 +125,30 @@ while run:
             run = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             check = check_piece(mouse_pos[0],mouse_pos[1])
+            # check if the first click is an empty piece
             if check != 0 and click1 == False:
-                click1_pos = get_pos(mouse_pos[0],mouse_pos[1])
-                click1 = True
+                turn = check_turn()
+                if turn == True and check > 20:
+                    click1_pos = get_pos(mouse_pos[0],mouse_pos[1])
+                    click1 = True
+                elif turn == False and check < 20:
+                    click1_pos = get_pos(mouse_pos[0],mouse_pos[1])
+                    click1 = True
             elif click1 == True:
                 click2_pos = get_pos(mouse_pos[0],mouse_pos[1])
                 click2 = True
+
+            # This part is for the moving of the pieces after the click
+            if click1 == True and click2 == True:
+                moves = move_piece(click1_pos,click2_pos,moves)
+                click1 = False
+                click2 = False
+
             clicked = True
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and clicked:
             clicked = False
-            if click1 == True and click2 == True:
-                move_piece(click1_pos,click2_pos)
-                click1 = False
-                click2 = False
-                
+
+
     # pygame.draw.rect(screen, white, (x, y, rect_width, rect_height))
     pygame.display.update()
 
