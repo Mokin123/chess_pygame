@@ -1,5 +1,4 @@
-import pygame
-import math
+import pygame;
 from board_loc import*
 from images import *
 from string import ascii_uppercase
@@ -77,6 +76,9 @@ def check_piece(x,y):
     second = int(x/100)
     return board[first][second]
 
+def check_piecev2(y,x):
+    return board[y][x]
+
 def get_pos(x,y):
     first = int(y/100)
     second = int(x/100)
@@ -84,8 +86,10 @@ def get_pos(x,y):
 
 # check who's turn it is
 def check_turn():
+    # for white
     if moves % 2 == 0:
         return True
+    # for black
     elif moves % 2 == 1:
         return False
 
@@ -96,16 +100,34 @@ def move_piece(old,new,move):
         board[old[0]][old[1]] = 0
         move = moves + 1
         return move
-#           current position of the piece
-# def pawn_rule(current,piece):
-#     # for white
-#     if piece >20:
-#         if current
-#
-#     # for black
-#     if piece < 20
-#         print(dsf)
 
+def append_arr(arr1,arr2,new_x,new_y,turn):
+    # white
+    if turn == True:
+        # use black to check if move position in enemy or empty
+        if black[0] < check_piecev2(new_y,new_x) < black[1] or check_piecev2(new_y,new_x) == 0:
+            arr1.append(new_y),arr2.append(new_x)
+            return arr1, arr2
+    # black
+    if turn == False:
+        if white[0] < check_piecev2(new_y,new_x) < white[1] or check_piecev2(new_y,new_x) == 0:
+            arr1.append(new_y), arr2.append(new_x)
+            return arr1, arr2
+        
+
+def pawn_rule(pos,turn):
+    vertical = []
+    horizontal = []
+    ver = pos[0]
+    hor = pos[1]
+#     # for white
+    if turn == True:
+        if ver == 6:
+            temp = append_arr(vertical,horizontal,ver-2,hor,turn)
+            vertical = temp[0]
+            horizontal = temp[1]
+        if ver < 7:
+            append_arr(vertical,horizontal,ver-1,hor,turn)
 
 
 
@@ -153,3 +175,4 @@ while run:
     pygame.display.update()
 
 pygame.quit()
+

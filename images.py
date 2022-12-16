@@ -1,4 +1,4 @@
-import pygame
+import pygame;
 
 chess_board = pygame.image.load(f'assets/chess_board.png')
 

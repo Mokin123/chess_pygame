@@ -1,4 +1,4 @@
-import pygame
+import pygame;
 
 
 A8 = pygame.rect.Rect((0,0), (100, 100))
